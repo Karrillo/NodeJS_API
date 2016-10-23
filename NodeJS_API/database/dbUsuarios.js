@@ -68,17 +68,14 @@ exports.GetAllCommentUsuarios = function(req, res, next) {
 		database :	db.dbName
 	});
 	connection.connect();
-	connection.query('SELECT c.texto, c.fecha FROM Usuarios AS u INNER JOIN Comentarios AS c ON u.ID_Usuario = c.ID_Usuario WHERE ID_Usuario = ?',[req.query.id_usuario], function(err, rows, fields){
+	connection.query('SELECT c.Fecha,c.Texto FROM usuarios as u INNER JOIN comentarios as c on u.ID_usuario=c.ID_usuario WHERE u.ID_usuario = ?',[req.query.id_usuario], function(err, rows, fields){
 		res.set('Access-Control-Allow-Origin', '*');
 		if(err){			
 			res.status(500).send( err );
 			connection.end();
 		} 
 		else {
-			var jsonResult = {
-				'texto': rows[0].texto,
-				'fecha': rows[0].fecha
-			};			
+			var jsonResult = rows;			
 			res.json(jsonResult);
 			res.end();
 			connection.end();

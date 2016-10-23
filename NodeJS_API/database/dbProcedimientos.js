@@ -39,17 +39,14 @@ exports.GetAllProcedimientos = function(req, res, next) {
 		database :	db.dbName
 	});
 	connection.connect();
-	connection.query('SELECT numeracion, Procedimientos FROM Procedimientos WHERE ID_receta = ?',[req.query.id_receta], function(err, rows, fields){
+	connection.query('SELECT numeracion, Procedimiento FROM Procedimientos WHERE ID_receta = ?',[req.query.id_receta], function(err, rows, fields){
 		res.set('Access-Control-Allow-Origin', '*');
 		if(err){			
 			res.status(500).send( err );
 			connection.end();
 		} 
 		else {
-			var post = {
-        		'numeracion': rows[0].numeracion,
-        		'Procedimientos': rows[0].Procedimientos
-   			 };		
+			var jsonResult = rows;					
 			res.json(jsonResult);
 			res.end();
 			connection.end();

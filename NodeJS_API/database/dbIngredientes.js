@@ -39,16 +39,14 @@ exports.GetAllIngredientes = function(req, res, next) {
 		database :	db.dbName
 	});
 	connection.connect();
-	connection.query('SELECT ingredientes FROM ingredientes WHERE ID_receta = ?',[req.query.id_receta], function(err, rows, fields){
+	connection.query('SELECT ingrediente FROM ingredientes WHERE ID_receta = ?',[req.query.id_receta], function(err, rows, fields){
 		res.set('Access-Control-Allow-Origin', '*');
 		if(err){			
 			res.status(500).send( err );
 			connection.end();
 		} 
 		else {
-			var post = {
-       		 'ingredientes': rows[0].ingredientes
-   		    };		
+			var jsonResult = rows;		
 			res.json(jsonResult);
 			res.end();
 			connection.end();

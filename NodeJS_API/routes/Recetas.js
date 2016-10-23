@@ -17,5 +17,13 @@ router.get('/InsertRecetas', function(req, res, next) {
 router.get('/UpdateRecetas', function(req, res, next) {
   	dbRecetas.UpdateRecetas(req, res, next);	
 });
+//localhost:3000/recetas/RecetaView
+router.get('/RecetaView', function(req, res, next) {
+  	dbRecetas.GetView(req, res, next);	
+});
+//localhost:3000/recetas/RecetaPersona?id_receta=
+router.get('/RecetaPersona', function(req, res, next) {
+  	dbRecetas.GetPersona(req, res, next);	
+});
 
 module.exports = router;

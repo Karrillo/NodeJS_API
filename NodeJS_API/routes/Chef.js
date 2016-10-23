@@ -25,5 +25,9 @@ router.get('/ChefDatos', function(req, res, next) {
 router.get('/ChefRecetas', function(req, res, next) {
   	dbChef.GetAllRecipesChef(req, res, next);	
 });
+//localhost:3000/Chef/ChefAllRecetas?id_chef=
+router.get('/ChefAllRecetas', function(req, res, next) {
+  	dbChef.GetAllrecipes(req, res, next);	
+});
 
 module.exports = router;

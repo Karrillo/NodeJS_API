@@ -39,16 +39,14 @@ exports.GetAllRecipes = function(req, res, next) {
 		database :	db.dbName
 	});
 	connection.connect();
-	connection.query('SELECT r.nombre as nombre_receta FROM recetas AS r INNER JOIN Categorias AS c ON r.ID_categoria = c.ID_categoria WHERE c.Nombre = ?',[req.query.nombre], function(err, rows, fields){
+	connection.query('SELECT r.Nombre FROM categorias AS c INNER JOIN recetas AS r ON c.ID_categoria=r.ID_categoria WHERE c.Nombre= ?',[req.query.nombre], function(err, rows, fields){
 		res.set('Access-Control-Allow-Origin', '*');
 		if(err){			
 			res.status(500).send( err );
 			connection.end();
 		} 
 		else {
-			var jsonResult = {
-				'nombre': rows[0].nombre_receta
-			};			
+			var jsonResult = rows;					
 			res.json(jsonResult);
 			res.end();
 			connection.end();

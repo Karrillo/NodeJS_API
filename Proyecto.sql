@@ -39,8 +39,8 @@ create table Recetas(
 	Tiempo	time not null,
 	ID_chef bigint not null,
 	ID_categoria bigint not null,
-	FOREIGN KEY(ID_categoria) REFERENCES Categorias(ID_categoria),
-	FOREIGN KEY(ID_chef) REFERENCES Chef(ID_chef)
+	FOREIGN KEY(ID_categoria) REFERENCES Categorias(ID_categoria) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(ID_chef) REFERENCES Chef(ID_chef) ON DELETE CASCADE ON UPDATE CASCADE
 )
 GO
 create table Comentarios(
@@ -49,15 +49,15 @@ create table Comentarios(
 	Texto tinytext not null,
 	ID_usuario bigint not null,
 	ID_receta bigint not null,
-	FOREIGN KEY(ID_usuario) REFERENCES Usuarios(ID_usuario),
-	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta)
+	FOREIGN KEY(ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta) ON DELETE CASCADE ON UPDATE CASCADE
 )
 GO
 create table Ingredientes(
 	ID_Ingrediente bigint AUTO_INCREMENT primary key not null,
 	Ingrediente varchar(50) not null,
 	ID_receta bigint not null,
-	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta)
+	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta) ON DELETE CASCADE ON UPDATE CASCADE
 )
 GO
 create table Procedimientos(
@@ -65,7 +65,7 @@ create table Procedimientos(
 	Numeracion tinyint not null,
 	Procedimiento tinytext not null,
 	ID_receta bigint not null,
-	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta)
+	FOREIGN KEY(ID_receta) REFERENCES Recetas(ID_receta) ON DELETE CASCADE ON UPDATE CASCADE
 )
 
 --VIEW
@@ -87,11 +87,10 @@ VALUES (NEW.id_persona)
 
 --PROCEDURE
 CREATE PROCEDURE `P_receta`(IN `id` BIGINT)
-SELECT r.Nombre,i.Ingrediente,p.Numeracion,p.Procedimiento 
-FROM recetas as r 
-INNER JOIN ingredientes AS i on r.ID_receta=i.ID_receta 
-INNER JOIN procedimientos as p on r.ID_receta=p.ID_receta 
-WHERE r.ID_receta = id
+SELECT DISTINCT p.* FROM personas AS p INNER JOIN 
+chef AS c ON p.ID_persona=c.ID_persona
+INNER JOIN recetas AS r ON c.ID_chef=r.ID_chef
+WHERE r.ID_chef=id
 
 CREATE PROCEDURE `P_chef`(IN `id` BIGINT)
 SELECT p.Username, r.Nombre as rnombre, cc.Nombre as cnombre 

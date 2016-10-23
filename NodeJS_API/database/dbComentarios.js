@@ -46,16 +46,13 @@ exports.GetAllCommentRecipe = function(req, res, next) {
 			connection.end();
 		} 
 		else {
-			var post = {
-        'comentario': rows[0].texto,
-        'fecha': rows[0].fecha
-   		 };	
+			var jsonResult = rows;					
 			res.json(jsonResult);
 			res.end();
 			connection.end();
 		}		
 	});	
-};
+}; 
 
 exports.InsertComentarios = function(req, res, next) {
 	var connection = mysql.createConnection({

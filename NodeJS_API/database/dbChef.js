@@ -31,6 +31,29 @@ exports.GetChef = function(req, res, next) {
 	});	
 };
 
+exports.GetAllrecipes = function(req, res, next) {
+	var connection = mysql.createConnection({
+		host : 		db.host,
+		user : 		db.user, 
+		password :	db.password, 
+		database :	db.dbName
+	});
+	connection.connect();
+	connection.query('CALL p_chef ( ? )',[req.query.id_chef], function(err, rows, fields){
+		res.set('Access-Control-Allow-Origin', '*');
+		if(err){			
+			res.status(500).send( err );
+			connection.end();
+		} 
+		else {
+			var jsonResult = rows;					
+			res.json(jsonResult);
+			res.end();
+			connection.end();
+		}		
+	});	
+};
+
 exports.GetAllChefData = function(req, res, next) {
 	var connection = mysql.createConnection({
 		host : 		db.host,
@@ -68,16 +91,14 @@ exports.GetAllRecipesChef = function(req, res, next) {
 		database :	db.dbName
 	});
 	connection.connect();
-	connection.query('SELECT r.nombre FROM recetas AS r INNER JOIN chef AS c ON r.ID_chef = c.ID_chef WHERE ID_chef = ?',[req.query.id_chef], function(err, rows, fields){
+	connection.query('SELECT r.nombre FROM recetas AS r INNER JOIN chef AS c ON r.ID_chef = c.ID_chef WHERE r.ID_chef = ?',[req.query.id_chef], function(err, rows, fields){
 		res.set('Access-Control-Allow-Origin', '*');
 		if(err){			
 			res.status(500).send( err );
 			connection.end();
 		} 
 		else {
-			var jsonResult = {
-				'nombre': rows[0].nombre
-			};					
+			var jsonResult = rows;					
 			res.json(jsonResult);
 			res.end();
 			connection.end();

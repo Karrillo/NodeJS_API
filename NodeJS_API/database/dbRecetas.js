@@ -31,6 +31,52 @@ exports.GetRecetas = function(req, res, next) {
 	});	
 };
 
+exports.GetView = function(req, res, next) {
+	var connection = mysql.createConnection({
+		host : 		db.host,
+		user : 		db.user, 
+		password :	db.password, 
+		database :	db.dbName
+	});
+	connection.connect();
+	connection.query('SELECT * from vreceta', function(err, rows, fields){
+		res.set('Access-Control-Allow-Origin', '*');
+		if(err){			
+			res.status(500).send( err );
+			connection.end();
+		} 
+		else {
+			var jsonResult = rows;					
+			res.json(jsonResult);
+			res.end();
+			connection.end();
+		}		
+	});	
+};
+
+exports.GetPersona = function(req, res, next) {
+	var connection = mysql.createConnection({
+		host : 		db.host,
+		user : 		db.user, 
+		password :	db.password, 
+		database :	db.dbName
+	});
+	connection.connect();
+	connection.query('CALL p_receta ( ? )',[req.query.id_receta], function(err, rows, fields){
+		res.set('Access-Control-Allow-Origin', '*');
+		if(err){			
+			res.status(500).send( err );
+			connection.end();
+		} 
+		else {
+			var jsonResult = rows;					
+			res.json(jsonResult);
+			res.end();
+			connection.end();
+		}		
+	});	
+};
+
 exports.InsertRecetas = function(req, res, next) {
 	var connection = mysql.createConnection({
 		host : 		db.host,
